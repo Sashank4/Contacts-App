@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -30,6 +31,12 @@ public class AddUpdateContactFragment extends Fragment {
         editContactName = view.findViewById(R.id.editContactName);
         editContactNumber = view.findViewById(R.id.editContactNumber);
 
+        Toolbar toolbar = view.findViewById(R.id.show_contacts_toolbar);
+        toolbar.setTitle("Add/Update Contacts");
+        toolbar.setNavigationOnClickListener(v -> {
+                requireActivity().getSupportFragmentManager().popBackStack(); // Just navigate back
+
+        });
         Bundle arguments = getArguments();
         long contactId;
         String contactName = null;

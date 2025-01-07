@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -37,6 +38,11 @@ public class ShowContactsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        Toolbar toolbar = view.findViewById(R.id.show_contacts_toolbar);
+        toolbar.setTitle("Show Contacts");
+
+
+
         fab = view.findViewById(R.id.add_contact);
         fab.setOnClickListener(v -> {
             AddUpdateContactFragment fragment = new AddUpdateContactFragment();
@@ -46,6 +52,8 @@ public class ShowContactsFragment extends Fragment {
                     .addToBackStack(null) // Adds to back stack to allow navigating back
                     .commit();
         });
+
+
 
         requestPermissions();
         return view;
