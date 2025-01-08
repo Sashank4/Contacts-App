@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,17 +44,19 @@ public class AddUpdateContactFragment extends Fragment {
 
         });
         Bundle arguments = getArguments();
-        long contactId;
+        long contactId; // Default value
         String contactName = null;
         String contactNumber = null;
 
         if (arguments != null) {
-            contactId = arguments.getLong(String.valueOf((R.string.contact_id_key)), -1); // Default value is -1 if not found
-            contactName = arguments.getString(String.valueOf(R.string.contact_name_key));
-            contactNumber = arguments.getString(String.valueOf(R.string.contact_number_key));
+            contactId = arguments.getLong(getString(R.string.contact_id_key), -1);
+            contactName = arguments.getString(getString(R.string.contact_name_key));
+            contactNumber = arguments.getString(getString(R.string.contact_number_key));
         } else {
             contactId = -1;
+
         }
+
 
         // Check if contactId is valid (not -1), meaning we're updating an existing contact
         if (contactId != -1) {

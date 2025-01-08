@@ -6,10 +6,10 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class ShowContactsFragment extends Fragment {
+public class ShowContactsFragment extends Fragment implements ContactAdapter.OnContactClickListener {
 
     private RecyclerView recyclerView;
     private ContactAdapter adapter;
@@ -113,7 +113,7 @@ public class ShowContactsFragment extends Fragment {
     private void loadContacts() {
         // RecyclerView Setup
         List<Contact> contactList = fetchContacts();
-        adapter = new ContactAdapter(contactList);
+        adapter = new ContactAdapter(contactList, this);
         recyclerView.setAdapter(adapter);
 
         // Initialize the ListView
@@ -123,8 +123,6 @@ public class ShowContactsFragment extends Fragment {
         // Initialize the GridView
         ContactBaseAdapter gridAdapter = new ContactBaseAdapter(getContext(), contactList);
         gridView.setAdapter(gridAdapter);
-
-
     }
 
     private List<Contact> fetchContacts() {
@@ -176,5 +174,23 @@ public class ShowContactsFragment extends Fragment {
         gridView.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void onContactClick(Contact contact) {
+        // Create a new instance of AddUpdateContactFragment
+        AddUpdateContactFragment fragment = new AddUpdateContactFragment();
+
+        // Pass data using a Bundle
+        Bundle bundle = new Bundle();
+        bundle.putLong(getString(R.string.contact_id_key), contact.getContactId());
+        bundle.putString(getString(R.string.contact_name_key), contact.getName());
+        bundle.putString(getString(R.string.contact_number_key), contact.getPhoneNumber());
+        fragment.setArguments(bundle);
+
+        // Begin the transaction to replace the current fragment
+        requireActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
 
 }
