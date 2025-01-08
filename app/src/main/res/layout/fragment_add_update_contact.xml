@@ -6,7 +6,7 @@
     >
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/show_contacts_toolbar"
+        android:id="@+id/add_update_contacts_toolbar"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
         app:titleTextColor="@color/white"

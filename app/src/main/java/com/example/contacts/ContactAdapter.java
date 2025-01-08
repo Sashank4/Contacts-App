@@ -23,19 +23,15 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         this.contactList = contactList;
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    public void updateContactList(List<Contact> newContactList) {
-        this.contactList.clear();
-        this.contactList.addAll(newContactList);
-        notifyDataSetChanged(); // Notify RecyclerView to refresh
-    }
-
     @NonNull
     @Override
     public ContactViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflate the contact_item.xml
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_card, parent, false);
+        Log.d("RecyclerView", "onCreateViewHolder called"); // Log to track calls
+
         return new ContactViewHolder(view);
+
     }
 
     @Override
@@ -44,6 +40,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         Contact contact = contactList.get(position);
         holder.nameTextView.setText(contact.getName());
         holder.phoneTextView.setText(contact.getPhoneNumber());
+
+        Log.d("RecyclerView", "onBindViewHolder called for position: " + position); // Log to track calls
 
         holder.itemView.setOnClickListener(v -> {
             Context context = holder.itemView.getContext();
@@ -79,6 +77,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         return contactList.size();
     }
 
+
     // ViewHolder class to hold item views
     public static class ContactViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView, phoneTextView;
@@ -89,4 +88,5 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             phoneTextView = itemView.findViewById(R.id.contact_phone);
         }
     }
+
 }

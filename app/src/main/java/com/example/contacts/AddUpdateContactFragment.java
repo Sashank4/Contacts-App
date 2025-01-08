@@ -17,11 +17,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class AddUpdateContactFragment extends Fragment {
 
     private TextInputEditText editContactName;
     private TextInputEditText editContactNumber;
+    private TextInputLayout editContactNameLayout;
+    private TextInputLayout editContactNumberLayout;
 
     @Nullable
     @Override
@@ -30,9 +33,11 @@ public class AddUpdateContactFragment extends Fragment {
 
         editContactName = view.findViewById(R.id.editContactName);
         editContactNumber = view.findViewById(R.id.editContactNumber);
+        editContactNameLayout = view.findViewById(R.id.contact_name_layout);
+        editContactNumberLayout = view.findViewById(R.id.contact_number_layout);
 
-        Toolbar toolbar = view.findViewById(R.id.show_contacts_toolbar);
-        toolbar.setTitle("Add/Update Contacts");
+        Toolbar toolbar = view.findViewById(R.id.add_update_contacts_toolbar);
+        toolbar.setTitle(getString(R.string.add_contact_screen_title));
         toolbar.setNavigationOnClickListener(v -> {
                 requireActivity().getSupportFragmentManager().popBackStack(); // Just navigate back
 
@@ -67,8 +72,13 @@ public class AddUpdateContactFragment extends Fragment {
         String contactName = editContactName.getText().toString().trim();
         String contactNumber = editContactNumber.getText().toString().trim();
 
-        if (TextUtils.isEmpty(contactName) || TextUtils.isEmpty(contactNumber)) {
-            Toast.makeText(getContext(), "Please enter both name and number", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(contactName)) {
+            editContactNameLayout.setError("Please enter the Contact Name");
+            return;
+        }
+
+        if (TextUtils.isEmpty(contactNumber)) {
+            editContactNumberLayout.setError("Please enter the Contact Number");
             return;
         }
 
@@ -111,8 +121,13 @@ public class AddUpdateContactFragment extends Fragment {
         String contactName = editContactName.getText().toString().trim();
         String contactNumber = editContactNumber.getText().toString().trim();
 
-        if (TextUtils.isEmpty(contactName) || TextUtils.isEmpty(contactNumber)) {
-            Toast.makeText(getContext(), "Please enter both name and number", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(contactName)) {
+            editContactNameLayout.setError("Please enter the Contact Name");
+            return;
+        }
+
+        if (TextUtils.isEmpty(contactNumber)) {
+            editContactNumberLayout.setError("Please enter the Contact Number");
             return;
         }
 
