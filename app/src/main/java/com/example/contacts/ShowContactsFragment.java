@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,7 +120,7 @@ public class ShowContactsFragment extends Fragment implements ContactAdapter.OnC
         listView.setAdapter(listAdapter);
 
         // Initialize the GridView
-        ContactBaseAdapter gridAdapter = new ContactBaseAdapter(getContext(), contactList);
+        ContactGridBaseAdapter gridAdapter = new ContactGridBaseAdapter(getContext(), contactList);
         gridView.setAdapter(gridAdapter);
     }
 

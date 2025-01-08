@@ -41,7 +41,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
 
         holder.itemView.setOnClickListener(v -> {
             if (mListener != null) {
-
                 mListener.onContactClick(contact);
             }
         });
