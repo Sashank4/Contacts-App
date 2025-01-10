@@ -12,24 +12,34 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
+
     private final List<Contact> contactList;
     private final OnContactClickListener mListener;
+    private boolean isGridView;
 
     // Interface for callback
     public interface OnContactClickListener {
         void onContactClick(Contact contact);
     }
 
-    // Constructor accepting the listener
-    public ContactAdapter(List<Contact> contactList, OnContactClickListener listener) {
+    // Constructor accepting the listener and layout type (grid or list)
+    public ContactAdapter(List<Contact> contactList, OnContactClickListener listener, boolean isGridView) {
         this.contactList = contactList;
         this.mListener = listener;
+        this.isGridView = isGridView;
     }
 
     @NonNull
     @Override
     public ContactViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_card, parent, false);
+        View view;
+        if (isGridView) {
+            // Inflate the grid item layout
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_grid_card, parent, false);
+        } else {
+            // Inflate the list item layout
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_card, parent, false);
+        }
         return new ContactViewHolder(view);
     }
 
@@ -51,6 +61,13 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         return contactList.size();
     }
 
+    // Method to dynamically update layout (list or grid)
+    public void setGridView(boolean isGridView) {
+        this.isGridView = isGridView;
+        notifyDataSetChanged();  // Refresh the adapter to apply the new layout
+    }
+
+    // ViewHolder for binding data to the view
     public static class ContactViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView, phoneTextView;
 
@@ -60,4 +77,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             phoneTextView = itemView.findViewById(R.id.contact_phone);
         }
     }
+
+    @Override
+    public int getItemViewType(int position) {
+        // Return different view types for grid and list layout
+        return isGridView ? VIEW_TYPE_GRID : VIEW_TYPE_LIST;
+    }
+
+    // View types constants
+    private static final int VIEW_TYPE_GRID = 1;
+    private static final int VIEW_TYPE_LIST = 2;
 }

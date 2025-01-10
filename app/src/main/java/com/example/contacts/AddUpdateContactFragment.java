@@ -76,12 +76,12 @@ public class AddUpdateContactFragment extends Fragment {
         String contactNumber = editContactNumber.getText().toString().trim();
 
         if (TextUtils.isEmpty(contactName)) {
-            editContactNameLayout.setError("Please enter the Contact Name");
+            editContactNameLayout.setError(getContext().getString(R.string.contact_name_err));
             return;
         }
 
         if (TextUtils.isEmpty(contactNumber)) {
-            editContactNumberLayout.setError("Please enter the Contact Number");
+            editContactNumberLayout.setError(getContext().getString(R.string.contact_number_err));
             return;
         }
 
@@ -116,7 +116,7 @@ public class AddUpdateContactFragment extends Fragment {
                 }
         );
 
-        Toast.makeText(getContext(), "Contact updated successfully!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), R.string.contact_updated_toast, Toast.LENGTH_SHORT).show();
         requireActivity().getSupportFragmentManager().popBackStack();
     }
 
@@ -125,12 +125,12 @@ public class AddUpdateContactFragment extends Fragment {
         String contactNumber = editContactNumber.getText().toString().trim();
 
         if (TextUtils.isEmpty(contactName)) {
-            editContactNameLayout.setError("Please enter the Contact Name");
+            editContactNameLayout.setError(getContext().getString(R.string.contact_name_err));
             return;
         }
 
         if (TextUtils.isEmpty(contactNumber)) {
-            editContactNumberLayout.setError("Please enter the Contact Number");
+            editContactNumberLayout.setError(getContext().getString(R.string.contact_number_err));
             return;
         }
 
@@ -154,7 +154,7 @@ public class AddUpdateContactFragment extends Fragment {
         phoneValues.put(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE);
         requireContext().getContentResolver().insert(ContactsContract.Data.CONTENT_URI, phoneValues);
 
-        Toast.makeText(getContext(), "Contact added successfully!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), R.string.contact_added_toast, Toast.LENGTH_SHORT).show();
         requireActivity().getSupportFragmentManager().popBackStack();
     }
 }

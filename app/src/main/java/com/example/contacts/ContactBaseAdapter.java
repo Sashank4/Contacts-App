@@ -1,24 +1,23 @@
 package com.example.contacts;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import androidx.fragment.app.FragmentActivity;
-
 import java.util.List;
 
 public class ContactBaseAdapter extends BaseAdapter {
     private final List<Contact> contactList;
     private final Context context;
+    private final ContactAdapter.OnContactClickListener mListener;
 
-    public ContactBaseAdapter(Context context, List<Contact> contactList) {
+    public ContactBaseAdapter(Context context, List<Contact> contactList, ListViewFragment listener) {
         this.context = context;
         this.contactList = contactList;
+        this.mListener = listener;
     }
 
     @Override
@@ -53,27 +52,10 @@ public class ContactBaseAdapter extends BaseAdapter {
         nameTextView.setText(contact.getName());
         phoneTextView.setText(contact.getPhoneNumber());
 
+        // Set click listener on the item view
         convertView.setOnClickListener(v -> {
-            if (context != null && context instanceof FragmentActivity) {
-                FragmentActivity activity = (FragmentActivity) context;
-
-                // Create a new instance of AddUpdateContactFragment
-                AddUpdateContactFragment fragment = new AddUpdateContactFragment();
-
-                // Pass data using a Bundle
-                Bundle bundle = new Bundle();
-                bundle.putLong(String.valueOf(R.string.contact_id_key), contact.getContactId());
-                bundle.putString(String.valueOf(R.string.contact_name_key), contact.getName());
-                bundle.putString(String.valueOf(R.string.contact_number_key), contact.getPhoneNumber());
-
-                // Set the arguments to the fragment
-                fragment.setArguments(bundle);
-
-                // Begin the transaction to replace the current fragment
-                activity.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, fragment)  // Replace with your fragment container's ID
-                        .addToBackStack(null)  // Optionally add to back stack
-                        .commit();
+            if (mListener != null) {
+                mListener.onContactClick(contact);
             }
         });
 

@@ -17,4 +17,8 @@
     <string name="list_view_button">List View</string>
     <string name="grid_view_button">Grid View</string>
     <string name="recycler_view_button">Recycler</string>
+    <string name="contact_name_err">Please enter a Contact Name</string>
+    <string name="contact_number_err">Please enter a Contact Number</string>
+    <string name="contact_updated_toast">Contact Updated Successfully</string>
+    <string name="contact_added_toast">Contact Added Successfully</string>
 </resources>
