@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class ListViewFragment extends BaseContactsFragment implements ContactAdapter.OnContactClickListener {
+public class ListViewFragment extends BaseContactsFragment {
 
     private ListView listView;
     private ConstraintLayout permissionDeniedView;
@@ -59,7 +59,6 @@ public class ListViewFragment extends BaseContactsFragment implements ContactAda
     @Override
     protected void giveCTAClicked() {
         checkAndRequestPermissions();
-        Toast.makeText(getContext(), "Permission requested from CTA", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -87,50 +86,6 @@ public class ListViewFragment extends BaseContactsFragment implements ContactAda
         listView.setAdapter(listAdapter);
     }
 
-    private List<Contact> fetchContacts() {
-        List<Contact> contactList = new ArrayList<>();
-        Cursor cursor = requireContext().getContentResolver().query(
-                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                new String[]{
-                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
-                        ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-                        ContactsContract.CommonDataKinds.Phone.NUMBER
-                },
-                null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
-        );
 
-        if (cursor != null) {
-            HashSet<Long> uniqueContacts = new HashSet<>();
-            while (cursor.moveToNext()) {
-                @SuppressLint("Range") long contactId = cursor.getLong(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
-                @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                @SuppressLint("Range") String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-                if (uniqueContacts.add(contactId)) {
-                    contactList.add(new Contact(contactId, name, phoneNumber));
-                }
-            }
-            cursor.close();
-        }
-        return contactList;
-    }
-
-    @Override
-    public void onContactClick(Contact contact) {
-        // Create a new instance of AddUpdateContactFragment
-        AddUpdateContactFragment fragment = new AddUpdateContactFragment();
-
-        // Pass data using a Bundle
-        Bundle bundle = new Bundle();
-        bundle.putLong(getString(R.string.contact_id_key), contact.getContactId());
-        bundle.putString(getString(R.string.contact_name_key), contact.getName());
-        bundle.putString(getString(R.string.contact_number_key), contact.getPhoneNumber());
-        fragment.setArguments(bundle);
-
-        // Begin the transaction to replace the current fragment
-        requireActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit();
-    }
 }
