@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class AddUpdateContactFragment extends Fragment {
 
     private TextInputEditText editContactName;
     private TextInputEditText editContactNumber;
+    private TextInputLayout editContactNameLayout;
+    private TextInputLayout editContactNumberLayout;
 
     @Nullable
     @Override
@@ -30,25 +34,29 @@ public class AddUpdateContactFragment extends Fragment {
 
         editContactName = view.findViewById(R.id.editContactName);
         editContactNumber = view.findViewById(R.id.editContactNumber);
+        editContactNameLayout = view.findViewById(R.id.contact_name_layout);
+        editContactNumberLayout = view.findViewById(R.id.contact_number_layout);
 
-        Toolbar toolbar = view.findViewById(R.id.show_contacts_toolbar);
-        toolbar.setTitle("Add/Update Contacts");
+        Toolbar toolbar = view.findViewById(R.id.add_update_contacts_toolbar);
+        toolbar.setTitle(getString(R.string.add_contact_screen_title));
         toolbar.setNavigationOnClickListener(v -> {
                 requireActivity().getSupportFragmentManager().popBackStack(); // Just navigate back
 
         });
         Bundle arguments = getArguments();
-        long contactId;
+        long contactId; // Default value
         String contactName = null;
         String contactNumber = null;
 
         if (arguments != null) {
-            contactId = arguments.getLong(String.valueOf((R.string.contact_id_key)), -1); // Default value is -1 if not found
-            contactName = arguments.getString(String.valueOf(R.string.contact_name_key));
-            contactNumber = arguments.getString(String.valueOf(R.string.contact_number_key));
+            contactId = arguments.getLong(getString(R.string.contact_id_key), -1);
+            contactName = arguments.getString(getString(R.string.contact_name_key));
+            contactNumber = arguments.getString(getString(R.string.contact_number_key));
         } else {
             contactId = -1;
+
         }
+
 
         // Check if contactId is valid (not -1), meaning we're updating an existing contact
         if (contactId != -1) {
@@ -67,8 +75,13 @@ public class AddUpdateContactFragment extends Fragment {
         String contactName = editContactName.getText().toString().trim();
         String contactNumber = editContactNumber.getText().toString().trim();
 
-        if (TextUtils.isEmpty(contactName) || TextUtils.isEmpty(contactNumber)) {
-            Toast.makeText(getContext(), "Please enter both name and number", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(contactName)) {
+            editContactNameLayout.setError(getContext().getString(R.string.contact_name_err));
+            return;
+        }
+
+        if (TextUtils.isEmpty(contactNumber)) {
+            editContactNumberLayout.setError(getContext().getString(R.string.contact_number_err));
             return;
         }
 
@@ -103,7 +116,7 @@ public class AddUpdateContactFragment extends Fragment {
                 }
         );
 
-        Toast.makeText(getContext(), "Contact updated successfully!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), R.string.contact_updated_toast, Toast.LENGTH_SHORT).show();
         requireActivity().getSupportFragmentManager().popBackStack();
     }
 
@@ -111,8 +124,13 @@ public class AddUpdateContactFragment extends Fragment {
         String contactName = editContactName.getText().toString().trim();
         String contactNumber = editContactNumber.getText().toString().trim();
 
-        if (TextUtils.isEmpty(contactName) || TextUtils.isEmpty(contactNumber)) {
-            Toast.makeText(getContext(), "Please enter both name and number", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(contactName)) {
+            editContactNameLayout.setError(getContext().getString(R.string.contact_name_err));
+            return;
+        }
+
+        if (TextUtils.isEmpty(contactNumber)) {
+            editContactNumberLayout.setError(getContext().getString(R.string.contact_number_err));
             return;
         }
 
@@ -136,7 +154,7 @@ public class AddUpdateContactFragment extends Fragment {
         phoneValues.put(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE);
         requireContext().getContentResolver().insert(ContactsContract.Data.CONTENT_URI, phoneValues);
 
-        Toast.makeText(getContext(), "Contact added successfully!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), R.string.contact_added_toast, Toast.LENGTH_SHORT).show();
         requireActivity().getSupportFragmentManager().popBackStack();
     }
 }
